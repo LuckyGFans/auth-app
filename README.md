@@ -5,6 +5,8 @@ An authenticator and password manager application with browser integration.
 ## Features
 
 - Browser extension for saving and autofilling logins and passwords on websites.
+- Supports storing TOTP secrets for 2FA code generation.
+- Generates TOTP codes on demand or when filling logins.
 - Supports various accounts like Microsoft, iTunes, Google, GitHub, Instagram.
 
 ## Browser Extension Setup
@@ -17,8 +19,9 @@ An authenticator and password manager application with browser integration.
 ## Usage
 
 - Click the extension icon on a login page.
-- Use "Save Current Login" to store credentials.
-- Use "Fill Login" to autofill saved credentials.
+- Enter TOTP secret if available, then "Save Current Login" to store credentials.
+- Use "Fill Login" to autofill saved credentials and display TOTP if available.
+- Use "TOTP Generator" to generate codes from secrets.
 
 ## Development
 

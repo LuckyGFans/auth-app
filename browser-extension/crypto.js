@@ -55,4 +55,46 @@ async function decryptData(encryptedData) {
   return JSON.parse(new TextDecoder().decode(decrypted));
 }
 
-window.cryptoUtils = { encryptData, decryptData };
+// Base32 decode function
+function base32Decode(str) {
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+  let bits = '';
+  for (let char of str.toUpperCase()) {
+    if (char === '=') break;
+    const index = alphabet.indexOf(char);
+    if (index === -1) throw new Error('Invalid base32 character');
+    bits += index.toString(2).padStart(5, '0');
+  }
+  const bytes = [];
+  for (let i = 0; i < bits.length; i += 8) {
+    bytes.push(parseInt(bits.substr(i, 8), 2));
+  }
+  return new Uint8Array(bytes);
+}
+
+// TOTP generate function
+async function generateTOTP(secret) {
+  const key = await crypto.subtle.importKey(
+    'raw',
+    base32Decode(secret),
+    { name: 'HMAC', hash: 'SHA-1' },
+    false,
+    ['sign']
+  );
+  const time = Math.floor(Date.now() / 1000 / 30);
+  const timeBytes = new Uint8Array(8);
+  for (let i = 7; i >= 0; i--) {
+    timeBytes[i] = time & 0xff;
+    time >>= 8;
+  }
+  const hmac = await crypto.subtle.sign('HMAC', key, timeBytes);
+  const hmacBytes = new Uint8Array(hmac);
+  const offset = hmacBytes[19] & 0xf;
+  const code = ((hmacBytes[offset] & 0x7f) << 24) |
+               ((hmacBytes[offset + 1] & 0xff) << 16) |
+               ((hmacBytes[offset + 2] & 0xff) << 8) |
+               (hmacBytes[offset + 3] & 0xff);
+  return (code % 1000000).toString().padStart(6, '0');
+}
+
+window.cryptoUtils = { encryptData, decryptData, generateTOTP };
