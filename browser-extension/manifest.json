@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "Auth App Extension",
+  "version": "1.0",
+  "description": "Browser extension for gathering and autofilling logins and passwords",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Auth App"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["crypto.js", "content.js"]
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
+}
