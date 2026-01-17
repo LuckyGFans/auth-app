@@ -12,6 +12,22 @@ document.getElementById('fill').addEventListener('click', () => {
   });
 });
 
+document.getElementById('addSamples').addEventListener('click', async () => {
+  const samples = [
+    { hostname: 'github.com', username: 'testuser', password: 'testpass123', secret: 'JBSWY3DPEHPK3PXP' },
+    { hostname: 'google.com', username: 'test@gmail.com', password: 'password456', secret: '' },
+    { hostname: 'example.com', username: 'demo', password: 'demo123', secret: 'JBSWY3DPEHPK3PXP' }
+  ];
+
+  for (const sample of samples) {
+    const data = { username: sample.username, password: sample.password, secret: sample.secret };
+    const encrypted = await window.cryptoUtils.encryptData(data);
+    chrome.storage.local.set({ [sample.hostname]: encrypted });
+  }
+
+  document.getElementById('status').textContent = 'Sample passwords added!';
+});
+
 document.getElementById('generate').addEventListener('click', async () => {
   const secret = document.getElementById('secret').value;
   if (secret) {

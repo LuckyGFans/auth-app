@@ -21,6 +21,8 @@ An authenticator and password manager application with browser integration.
 - Click the extension icon on a login page.
 - Enter TOTP secret if available, then "Save Current Login" to store credentials.
 - Use "Fill Login" to autofill saved credentials and display TOTP if available.
+- Use "Add Password Manually" to add credentials for any site by providing URL, username, password, and optional TOTP secret.
+- Use "Add Sample Passwords" to populate the extension with test credentials for github.com, google.com, and example.com.
 - Use "TOTP Generator" to generate codes from secrets.
 
 ## Development
